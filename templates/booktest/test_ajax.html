@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajax请求</title>
+    <script src="/static/js/jquery-1.12.4.min.js"></script>
+    <script>
+        {#页面加载完成时#}
+        $(function () {
+            //绑定btnAJax的click事件
+            $('#btnAjax').click(function () {
+                $.ajax({
+                    'url': '/ajax_handle',
+                    'type': 'get',
+                    'dataType': 'json',
+                    'data':{'a': 'admin'}
+                }).success(function (res) {
+                    //进行处理
+                    alert(res.res)
+                })
+            })
+        })
+    </script>
+</head>
+<body>
+<input type="button" id="btnAjax" value="ajac请求">
+</body>
+</html>
