@@ -73,3 +73,19 @@ def ajax_handle(request):
     a = request.GET.get('a')
     # 返回的json数据 {'res': a}
     return JsonResponse({'res': a})
+
+
+def login_ajax(request):
+    """显示ajax登录页面"""
+    return render(request, 'booktest/login_ajax.html')
+
+
+def login_ajax_check(request):
+    username = request.POST.get('username')
+    psd = request.POST.get('password')
+    # 2 进行登录的校验
+    # 实际开发：根据用户名和密码查找数据库
+    if username == 'admin' and psd == 'admin':
+        return JsonResponse({'res': 1})
+    else:
+        return JsonResponse({'res': 0})
