@@ -4,9 +4,25 @@ from booktest.models import *
 from datetime import date
 
 
+def login_required(view_func):
+    '''登录判断装饰器'''
+
+    def wrapper(request, *view_args, **view_kwargs):
+        # 判断用户是否登录
+        if request.session.has_key('islogin'):
+            # 用户已登录,调用对应的视图
+            return view_func(request, *view_args, **view_kwargs)
+        else:
+            # 用户未登录,跳转到登录页
+            return redirect('/login')
+
+    return wrapper
+
+
 # 查询所有图书并显示
 # request 就是HttpRequest类型的对象
 # request 包含浏览器请求信息
+@login_required
 def index(request):
     """显示图书信息"""
     list = BookInfo.objects.all()
@@ -14,6 +30,7 @@ def index(request):
 
 
 # 创建新图书
+@login_required
 def create(request):
     """创建新图书"""
     book = BookInfo()
@@ -25,6 +42,7 @@ def create(request):
 
 
 # 逻辑删除指定编号的图书
+@login_required
 def delete(request, id):
     book = BookInfo.objects.get(id=int(id))
     book.delete()
@@ -32,6 +50,7 @@ def delete(request, id):
     return redirect('/')
 
 
+@login_required
 def detail(request, bid):
     """查询图书关联的英雄信息"""
     # 1 通过bid查询图书信息
@@ -43,23 +62,93 @@ def detail(request, bid):
 
 
 def login(request):
-    """显示登录页面"""
-    return render(request, 'booktest/login.html')
+    '''显示登录页面'''
+    # 判断用户是否登录
+    if request.session.has_key('islogin'):
+        # 用户已登录, 跳转到修改密码页面
+        return redirect('/change_pwd')
+    else:
+        # 用户未登录
+        # 获取cookie username
+        if 'username' in request.COOKIES:
+            # 获取记住的用户名
+            username = request.COOKIES['username']
+        else:
+            username = ''
+
+        return render(request, 'booktest/login.html', {'username': username})
 
 
 def login_check(request):
-    """登录校验试图"""
-    # request.POST 保存的是post请求参数
-    # request.GET 保存的是get请求的参数
-    # 1 获取提交的用户名和密码
+    '''登录校验视图'''
+    # 1.获取提交的用户名和密码
     username = request.POST.get('username')
-    psd = request.POST.get('password')
-    # 2 进行登录的校验
-    # 实际开发：根据用户名和密码查找数据库
-    if username == 'admin' and psd == 'admin':
-        return redirect('/')
+    password = request.POST.get('password')
+    remember = request.POST.get('remember')  # None on
+
+    # 获取用户输入验证码
+    # vcode1 = request.POST.get('vcode')
+    # 获取session中保存的验证码
+    # vcode2 = request.session.get('verifycode')
+
+    # 进行验证码校验
+    # if vcode1 != vcode2:
+    #     # 验证码错误
+    #     return redirect('/login')
+
+    # 2.进行登录的校验
+    # 实际开发:根据用户名和密码查找数据库
+    # 模拟: smart 123
+    if username == 'admin' and password == 'admin':
+        # 用户名密码正确，跳转到修改密码页面
+        response = redirect('/change_pwd')
+
+        # 判断是否需要记住用户名
+        if remember == 'on':
+            # 设置cookie username，过期时间1周
+            response.set_cookie('username', username, max_age=7 * 24 * 3600)
+
+        # 记住用户登录状态
+        # 只有session中有islogin,就认为用户已登录
+        request.session['islogin'] = True
+        # 记住登录的用户名
+        request.session['username'] = username
+        # 返回应答
+        return response
     else:
+        # 用户名或密码错误，跳转到登录页面
         return redirect('/login')
+
+
+# /change_pwd
+@login_required
+def change_pwd(request):
+    '''显示修改密码页面'''
+    # # 进行用户是否登录的判断
+    # if not request.session.has_key('islogin'):
+    #     # 用户未登录，跳转到登录
+    #     return redirect('/login')
+
+    return render(request, 'booktest/change_pwd.html')
+
+
+# /change_pwd_action
+@login_required
+def change_pwd_action(request):
+    '''模拟修改密码处理'''
+    # # 进行用户是否登录的判断
+    # if not request.session.has_key('islogin'):
+    #     # 用户未登录，跳转到登录
+    #     return redirect('/login')
+
+    # 1.获取新密码
+    pwd = request.POST.get('pwd')
+    # 获取用户名
+    username = request.session.get('username')
+    # 2.实际开发的时候: 修改对应数据库中的内容...
+    # 3.返回一个应答
+    return redirect('/')
+    # return HttpResponse('%s修改密码为:%s' % (username, pwd))
 
 
 def ajax_test(request):
@@ -83,6 +172,7 @@ def login_ajax(request):
 def login_ajax_check(request):
     username = request.POST.get('username')
     psd = request.POST.get('password')
+
     # 2 进行登录的校验
     # 实际开发：根据用户名和密码查找数据库
     if username == 'admin' and psd == 'admin':

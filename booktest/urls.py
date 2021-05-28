@@ -10,6 +10,8 @@ urlpatterns = [
     url(r'^detail/(\d+)$', views.detail),  # 查看图书关联的英雄
     url(r'^login$', views.login),  # 显示登录页面
     url(r'^login_check$', views.login_check),  # 登录校验
+    url(r'^change_pwd$', views.change_pwd),  # 修改密码页面显示
+    url(r'^change_pwd_action$', views.change_pwd_action),  # 修改密码处理
     url(r'^test_ajax$', views.ajax_test),  # 显示ajax页面
     url(r'^ajax_handle$', views.ajax_handle),  # ajax处理
     url(r'^login_ajax$', views.login_ajax),  # 显示ajax登录页面

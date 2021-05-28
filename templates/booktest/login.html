@@ -8,8 +8,14 @@
 POST:提交的参数在请求头中。数据安全性要求比较高的时候
 GET: 提交的参数在url中。
 <form method="post" action="/login_check">
-    用户名：<input type="text" name="username"><br>
+    用户名：<input type="text" name="username" value="{{ username }}"><br>
     密码：<input type="password" name="password"><br>
+    {% if username != '' %}
+        <input type="checkbox" checked name="remember">记住用户名<br>
+    {% else %}
+        <input type="checkbox" name="remember">记住用户名<br>
+    {% endif %}
+
     <input type="submit" value="登录">
 </form>
 </body>
