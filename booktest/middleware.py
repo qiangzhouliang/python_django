@@ -13,7 +13,8 @@ class BlockedIPSMiddleware(MiddlewareMixin):
     EXCLUDE_IPS = ['192.168.0.103']
 
     # 初始化：无需任何参数，服务器响应第一个请求的时候调用一次，用于确定是否启用当前中间件。
-    def __init__(self, request):
+    def __init__(self, get_response):
+        self.get_response = get_response
         print('--------------init')
 
     # 处理请求前：在每个请求上，request对象产生之后，url匹配之前调用，返回None或HttpResponse对象。
