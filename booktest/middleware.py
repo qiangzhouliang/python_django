@@ -15,16 +15,14 @@ class BlockedIPSMiddleware(MiddlewareMixin):
     # 初始化：无需任何参数，服务器响应第一个请求的时候调用一次，用于确定是否启用当前中间件。
     def __init__(self, get_response):
         self.get_response = get_response
-        print('--------------init')
 
     # 处理请求前：在每个请求上，request对象产生之后，url匹配之前调用，返回None或HttpResponse对象。
     def process_request(self, request):
-        print('--------------request')
+        pass
 
     # 视图函数调运之前会调用,process_view:方法名必须写为这个
     # 处理视图前：在每个请求上，url匹配之后，视图函数调用之前调用，返回None或HttpResponse对象。
     def process_view(self, request, view_func, *view_args, **view_kwargs):
-        print('--------------view')
         """视图函数调运之前会调用"""
         user_ip = request.META['REMOTE_ADDR']
         if user_ip in BlockedIPSMiddleware.EXCLUDE_IPS:
@@ -32,5 +30,4 @@ class BlockedIPSMiddleware(MiddlewareMixin):
 
     # 处理响应后：视图函数调用之后，所有响应返回浏览器之前被调用，在每个请求上调用，返回HttpResponse对象。
     def process_response(self, request, response):
-        print('--------------response')
         return response
