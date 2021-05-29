@@ -4,6 +4,10 @@
 </head>
 <body>
     <a href="/create/">创建</a>
+    <a href="/login_ajax">ajax登录</a>
+    <a href="/test_ajax">ajax测试页面</a>
+    <a href="/show_upload">显示上传照片</a>
+    <a href="/areas">显示地区三级选择</a>
     <ul>
         {%for book in list%}
             <li><a href="/detail/{{ book.id }}">{{ book.btitle }}</a>--<a href="/delete{{book.id}}/">删除</a></li>
