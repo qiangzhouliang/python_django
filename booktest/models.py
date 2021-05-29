@@ -62,3 +62,8 @@ class AreaInfo(models.Model):
         else:
             return self.aParent.atitle
     parent.short_description = '父级地区名称'
+
+
+class PicTest(models.Model):
+    """上传图片"""
+    goods_pic = models.ImageField(upload_to='booktest')

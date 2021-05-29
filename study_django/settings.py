@@ -144,3 +144,6 @@ STATICFILES_DIRS = [Path(BASE_DIR, 'static')]
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# 配置上传文件存储目录
+MEDIA_ROOT = Path(BASE_DIR, 'static/media')

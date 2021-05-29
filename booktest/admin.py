@@ -1,5 +1,5 @@
 from django.contrib import admin
-from booktest.models import BookInfo, HeroInfo, AreaInfo
+from booktest.models import BookInfo, HeroInfo, AreaInfo, PicTest
 
 
 # 后台管理相关文件
@@ -44,7 +44,12 @@ class AreaInfoAdmin(admin.ModelAdmin):
     inlines = [AreaStackedInline]
 
 
+class PicTestAdmin(admin.ModelAdmin):
+    list_display = ['id', 'goods_pic']
+
+
 # 注册模型类
 admin.site.register(BookInfo, BookInfoAdmin)
 admin.site.register(HeroInfo, HeroInfoAdmin)
 admin.site.register(AreaInfo, AreaInfoAdmin)
+admin.site.register(PicTest, PicTestAdmin)
