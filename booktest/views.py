@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from booktest.models import *
 from datetime import date
+from django.conf import settings
 
 
 def login_required(view_func):
@@ -228,3 +229,24 @@ def login_ajax_check(request):
         return JsonResponse({'res': 1})
     else:
         return JsonResponse({'res': 0})
+
+
+def show_upload(request):
+    """显示上传图片"""
+    return render(request, 'booktest/upload_pic.html')
+
+
+def pic_handle(request):
+    """上传图片处理"""
+    # 1 获取上传的图片
+    f1 = request.FILES.get('pic')
+    # 2 创建一个文件
+    fname = '%s/booktest/%s' % (settings.MEDIA_ROOT, f1.name)
+    with open(fname, 'wb') as pic:
+        # 3 获取上传文件内容并写到创建的文件中
+        for c in f1.chunks():
+            pic.write(c)
+    # 4 在数据库中保存上传记录
+    PicTest().objects.create(goods_pic='booktest/%s' % f1.name)
+    # 5 返回
+    return HttpResponse('OK')

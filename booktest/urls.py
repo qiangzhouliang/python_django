@@ -17,4 +17,6 @@ urlpatterns = [
     url(r'^ajax_handle$', views.ajax_handle),  # ajax处理
     url(r'^login_ajax$', views.login_ajax),  # 显示ajax登录页面
     url(r'^login_ajax_check$', views.login_ajax_check),  # ajax登录请求校验
+    url(r'^show_upload$', views.show_upload),  # 显示上传照片页面
+    url(r'^pic_handle$', views.pic_handle),  # 上传照片处理
 ]
