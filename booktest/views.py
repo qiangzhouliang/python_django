@@ -3,6 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from booktest.models import *
 from datetime import date
 from django.conf import settings
+from django.core.paginator import Paginator
 
 
 def login_required(view_func):
@@ -24,10 +25,24 @@ def login_required(view_func):
 # request 就是HttpRequest类型的对象
 # request 包含浏览器请求信息
 @login_required
-def index(request):
+def index(request, pIndex):
     """显示图书信息"""
+    # 1 查询所有数据
     list = BookInfo.objects.all()
-    return render(request, 'booktest/index.html', {'list': list})
+    # 2 对数据进行分页
+    p = Paginator(list, 10)
+    # 如果当前没有传递页码信息，则认为是第一页，这样写是为了请求第一页时可以不写页码
+    if pIndex == '':
+        pIndex = '1'
+    # 通过url匹配的参数都是字符串类型，转换成int类型
+    pIndex = int(pIndex)
+    # 获取第pIndex页的数据
+    list2 = p.page(pIndex)
+    # 获取所有的页码信息
+    plist = p.page_range
+    # 将当前页码、当前页的数据、页码信息传递到模板中
+    # 使用模板
+    return render(request, 'booktest/index.html', {'list': list2, 'plist': plist, 'pIndex': pIndex})
 
 
 # 创建新图书

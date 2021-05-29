@@ -9,5 +9,14 @@
             <li><a href="/detail/{{ book.id }}">{{ book.btitle }}</a>--<a href="/delete{{book.id}}/">删除</a></li>
         {%endfor%}
     </ul>
+    <hr>
+    显示页码信息：当前页码没有链接，其它页码有链接<br>
+    {%for pindex in plist%}
+        {%if pIndex == pindex%}
+            {{pindex}}&nbsp;&nbsp;
+        {%else%}
+            <a href="/{{pindex}}">{{pindex}}</a>&nbsp;&nbsp;
+        {%endif%}
+    {%endfor%}
 </body>
 </html>

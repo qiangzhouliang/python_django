@@ -4,7 +4,7 @@ from booktest import views
 # 在应用的url文件中进行url配置的时候
 # 1 严格匹配开头和结尾
 urlpatterns = [
-    url(r'^$', views.index),
+    url(r'^(?P<pIndex>[0-9]*)$', views.index),
     url(r'^delete(\d+)/$', views.delete),  # 删除点击的图书
     url(r'^create/$', views.create),  # 新增图书
     url(r'^detail/(\d+)$', views.detail),  # 查看图书关联的英雄
