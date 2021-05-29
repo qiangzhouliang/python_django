@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-p&!bd3#ap)v9zwssh+k%+)@ie7x9d1$*$k^6$ilow^rnmlv%dt
 # SECURITY WARNING: don't run with debug turned on in production!
 # 开发时
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # 发布时要改成false
 # DEBUG = False
@@ -50,10 +50,11 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',  # 默认启用的CSRF防护，只针对post方式的提交
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'booktest.middleware.BlockedIPSMiddleware',  # 注册中间件类
 ]
 
 ROOT_URLCONF = 'study_django.urls'
