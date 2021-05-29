@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>省市县选择案例</title>
+    <script src="/static/js/jquery-1.12.4.min.js"></script>
+    <script>
+        $(function () {
+            //发起一个ajax请求，获取所有省级地区的信息
+            $.get('/prov', function (data) {
+                //回调函数
+                res = data.data
+                // 获取prov下拉列表框
+                prov = $('#prov')
+                //遍历 res数组，获取每一个元素
+                option_str = ''
+                {% comment %}for (i = 0; i < res.length; i++) {
+                    id = res[i][0]
+                    atitle = res[i][1]
+                    option_str += '<option value="'+id+'">'+atitle+'</option>'
+                }{% endcomment %}
+                $.each(res,function (index,item) {
+                    option_str += '<option value="'+item[0]+'">'+item[1]+'</option>'
+                })
+                prov.append(option_str)
+            })
+
+            // 绑定prov下拉列表框的change事件，获取省下面市的信息
+            $('#prov').change(function () {
+                // 获取省下面市级数据
+                prov_id = $(this).val()
+                $.get('/city/'+prov_id,function (data) {
+                    res = data.data
+                    // 获取prov下拉列表框
+                    city = $('#city')
+                    // 清空子元素
+                    city.empty().append('<option>---请选择市---</option>')
+                    //遍历 res数组，获取每一个元素
+                    option_str = ''
+                    $.each(res,function (index,item) {
+                        option_str += '<option value="'+item[0]+'">'+item[1]+'</option>'
+                    })
+                    city.append(option_str)
+                })
+            })
+
+            // 绑定city下拉列表框的change事件，获取省下面市的信息
+            $('#city').change(function () {
+                // 获取市下面县级地区数据
+                city_id = $(this).val()
+                $.get('/dis/'+city_id,function (data) {
+                    res = data.data
+                    // 获取prov下拉列表框
+                    dis = $('#dis')
+                    // 清空子元素
+                    dis.empty().append('<option>---请选择县---</option>')
+                    //遍历 res数组，获取每一个元素
+                    option_str = ''
+                    $.each(res,function (index,item) {
+                        option_str += '<option value="'+item[0]+'">'+item[1]+'</option>'
+                    })
+                    dis.append(option_str)
+                })
+            })
+        })
+    </script>
+</head>
+<body>
+    <select id="prov">
+        <option>---请选择省---</option>
+    </select>
+    <select id="city">
+        <option>---请选择市---</option>
+    </select>
+    <select id="dis">
+        <option>---请选择县---</option>
+    </select>
+</body>
+</html>

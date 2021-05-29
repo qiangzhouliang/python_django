@@ -265,3 +265,31 @@ def pic_handle(request):
     PicTest().objects.create(goods_pic='booktest/%s' % f1.name)
     # 5 返回
     return HttpResponse('OK')
+
+
+def areas(request):
+    """省市县选中案例"""
+    return render(request, 'booktest/areas.html')
+
+
+def prov(request):
+    """获取所有省级数据"""
+    # 1 获取所有省级地区的信息
+    areas = AreaInfo.objects.filter(aParent__isnull=True)
+    # 2 拼接出json数据：atitle和id
+    areas_list = []
+    for area in areas:
+        areas_list.append((area.id, area.atitle))
+    # 3 返回数据
+    return JsonResponse({'data': areas_list})
+
+
+def city(request, pid):
+    """获取省级下级地区的数据"""
+    citys = AreaInfo.objects.filter(aParent=pid)
+    # 2 拼接出json数据：atitle和id
+    citys_list = []
+    for city in citys:
+        citys_list.append((city.id, city.atitle))
+    # 3 返回数据
+    return JsonResponse({'data': citys_list})

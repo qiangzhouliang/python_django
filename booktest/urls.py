@@ -19,4 +19,8 @@ urlpatterns = [
     url(r'^login_ajax_check$', views.login_ajax_check),  # ajax登录请求校验
     url(r'^show_upload$', views.show_upload),  # 显示上传照片页面
     url(r'^pic_handle$', views.pic_handle),  # 上传照片处理
+    url(r'^areas$', views.areas),  # 显示省市县选择页面
+    url(r'^prov$', views.prov),  # 获取省级数据
+    url(r'^city/(\d+)$', views.city),  # 获取省下面市级数据
+    url(r'^dis/(\d+)$', views.city),  # 获取市下面县级数据
 ]
